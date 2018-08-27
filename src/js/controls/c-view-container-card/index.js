@@ -24,8 +24,8 @@ function ViewModel(params) {
 
 ViewModel.prototype.id = 'view-container-card';
 ViewModel.prototype.children = [
-    'list-card-answers' // Answers
-    ,'details-card-question' // Question
+    'details-card-question' // Question
+    ,'list-card-answers' // Answers
 ];
 
 exports.register = function () {
