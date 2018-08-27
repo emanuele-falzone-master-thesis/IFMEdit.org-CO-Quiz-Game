@@ -22,14 +22,13 @@ function ViewModel(params) {
     };
 }
 
-ViewModel.prototype.id = 'view-container-card';
+ViewModel.prototype.id = 'view-container-card-explanation';
 ViewModel.prototype.children = [
-    'list-card-answers' // Answers
-    ,'details-card-question' // Question
+    'details-card-explanation' // Explanation
 ];
 
 exports.register = function () {
-    ko.components.register('c-view-container-card', {
+    ko.components.register('c-view-container-card-explanation', {
         viewModel: {
             createViewModel: function (params, componentInfo) {
                 var vm = new ViewModel(params);

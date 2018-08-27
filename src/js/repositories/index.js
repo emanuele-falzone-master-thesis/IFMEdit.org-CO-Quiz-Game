@@ -3,7 +3,7 @@
 
 exports.createRepositories = function (options) {
     var repositories = {}
-    repositories['questions'] = require('./questions').createRepository(options);
     repositories['answers'] = require('./answers').createRepository(options);
+    repositories['questions'] = require('./questions').createRepository(options);
     return repositories;
 };

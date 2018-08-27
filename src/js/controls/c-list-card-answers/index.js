@@ -27,8 +27,8 @@ ViewModel.prototype.id = 'list-card-answers';
 
 ViewModel.prototype.fields = {
     id: 1
-    ,'content': 1
     ,'correctness': 1
+    ,'content': 1
 };
 
 ViewModel.prototype.waitForStatusChange = function () {
