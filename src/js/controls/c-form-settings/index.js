@@ -6,49 +6,50 @@ var ko = require('knockout'),
 
 function ViewModel(params) {
     var self = this;
-    self._repository = params.context.repositories['answers'];
     self.context = params.context;
     self.status = ko.observable('');
-    self.item = ko.observable(undefined);
+    self.fields = ko.observable({});
+    self.errors = ko.observable({});
 
     self.trigger = function (id) {
-        self.context.navigations[id](self.context, self.item());
+        self.context.navigations[id](self.context, self.output);
     };
 }
 
-ViewModel.prototype.id = 'details-card-result';
-
-ViewModel.prototype.fields = {
-    id: 1
-    ,'question': 1
-    ,'correctness': 1
-};
+ViewModel.prototype.id = 'form-settings';
 
 ViewModel.prototype.waitForStatusChange = function () {
-    return this._computing ||
-           this._initializing ||
+    return this._initializing ||
            Promise.resolve();
 };
 
-
-ViewModel.prototype._compute = function() {
-    if (this._computing) {
-        this._computing.cancel();
+ViewModel.prototype._compute = function () {
+    this.output = {
+        'language': this.input['language'],
     }
-    var self = this;
-    this._computing = this._repository.findById(this.filters.id, this.fields).then(function (item) {
-        self.output = item;
-        self.item(item);
-        self.status('computed');
-        self._computing = undefined;
+    var self = this,
+        fields = {
+            'language': ko.observable(this.input['language']),
+        },
+        errors = {
+            'language': ko.observable(this.input['language-error']),
+        };
+    fields['language'].subscribe(function (value) {
+        self.output['language'] = value;
+        self.errors()['language'](undefined);
     });
+    this.fields(fields);
+    this.errors(errors);
+    this.status('computed');
 };
 
 
 ViewModel.prototype.init = function (options) {
     options = options || {};
     this.output = undefined;
-    this.filters = options.input || {};
+    this.fields({});
+    this.errors({});
+    this.input = options.input || {};
     this.status('ready');
     var self = this;
     this._initializing = new Promise(function (resolve) {
@@ -61,7 +62,7 @@ ViewModel.prototype.init = function (options) {
 };
 
 exports.register = function () {
-    ko.components.register('c-details-card-result', {
+    ko.components.register('c-form-settings', {
         viewModel: {
             createViewModel: function (params, componentInfo) {
                 var vm = new ViewModel(params);
